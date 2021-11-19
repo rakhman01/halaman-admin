@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import React, { useState } from "react";
 import { REGISTER_MUTATIONS } from "./Api/register";
+import { useHistory } from "react-router";
 
 const validation = yup.object().shape({
   firstName: yup.string().required("Required"),
@@ -17,6 +18,8 @@ const Register = () => {
     phoneNumber: "",
     role: "SELLER",
   });
+
+  const history = useHistory();
 
   const [mutation] = useMutation(REGISTER_MUTATIONS);
 
@@ -37,7 +40,7 @@ const Register = () => {
           },
         },
       });
-      console.log(regis);
+      history.push("/Login");
     } catch (error) {
       console.log(error);
     }

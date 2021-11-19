@@ -4,6 +4,7 @@ import { LOGIN_MUTATIONS } from "./Api/login";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Cookies from "js-cookie";
+import { useHistory } from "react-router";
 
 const validationSchema = yup.object().shape({
   email: yup.string().required("Required").email("Invalid email"),
@@ -15,6 +16,8 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const history = useHistory();
 
   const [mutation] = useMutation(LOGIN_MUTATIONS);
 
@@ -31,6 +34,7 @@ const Login = () => {
         },
       });
       Cookies.set("token", signIn.data.login.token);
+      history.push("/TabelAdmin");
     } catch (error) {
       console.log(error);
     }
@@ -74,7 +78,7 @@ const Login = () => {
                 type="email"
                 autocomplete="email"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 onChange={userlogin.values.email}
                 onChange={userlogin.handleChange}
@@ -90,7 +94,7 @@ const Login = () => {
                 type="password"
                 autocomplete="current-password"
                 required
-                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                class="appearance-none  relative block mt-4 w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 value={userlogin.values.password}
                 onChange={userlogin.handleChange}
@@ -114,11 +118,23 @@ const Login = () => {
             <div class="text-sm">
               <a
                 href="#"
-                class="font-medium text-indigo-600 hover:text-indigo-500"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
               >
                 Forgot your password?
               </a>
             </div>
+          </div>
+
+          <div>
+            <p className="text-sm py-0 px-2 font-semibold text-gray-800">
+              Dont'have an Account ?
+              <a
+                href="./register"
+                className="px-2 text-sm font-bold text-indigo-600 hover:text-indigo-800"
+              >
+                Sign Up
+              </a>
+            </p>
           </div>
 
           <div>

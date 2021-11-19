@@ -5,14 +5,12 @@ import Login from "./Login";
 import Register from "./Register";
 import Navbar from "./Components/Navbar";
 import TableAdmin from "./Components/TableAdmin";
+import Routing from "./Api/Routing/Routing";
 
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      {/* <Navbar /> */}
-      {/* <TableAdmin /> */}
-      <Login />
-      {/* <Register /> */}
+      <Routing />
     </ApolloProvider>
   );
 };
