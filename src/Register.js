@@ -4,6 +4,7 @@ import * as yup from "yup";
 import React, { useState } from "react";
 import { REGISTER_MUTATIONS } from "./Api/register";
 import { useHistory } from "react-router";
+import { Alert, Snackbar } from "@mui/material";
 
 const validation = yup.object().shape({
   firstName: yup.string().required("Required"),
@@ -11,6 +12,10 @@ const validation = yup.object().shape({
 });
 
 const Register = () => {
+  const history = useHistory();
+  const [alerterror, setAlerterror] = useState(false);
+  const [succesalert, setSuccesalert] = useState(false);
+
   const [register] = useState({
     firstName: "",
     email: "",
@@ -18,8 +23,6 @@ const Register = () => {
     phoneNumber: "",
     role: "SELLER",
   });
-
-  const history = useHistory();
 
   const [mutation] = useMutation(REGISTER_MUTATIONS);
 
@@ -40,8 +43,10 @@ const Register = () => {
           },
         },
       });
-      history.push("/Login");
+      setSuccesalert(true);
+      history.push("/");
     } catch (error) {
+      setAlerterror(true);
       console.log(error);
     }
   };
@@ -142,6 +147,24 @@ const Register = () => {
             </button>
           </div>
         </form>
+        <div>
+          <Snackbar
+            open={alerterror}
+            onClose={() => setAlerterror(false)}
+            autoHideDuration={5000}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          >
+            <Alert severity="error">Akun Anda Sudah Terdaftar</Alert>
+          </Snackbar>
+          <Snackbar
+            open={succesalert}
+            onClose={() => setSuccesalert(false)}
+            autoHideDuration={5000}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          >
+            <Alert severity="success">Anda Berhasil Mendaftar</Alert>
+          </Snackbar>
+        </div>
       </div>
     </div>
   );

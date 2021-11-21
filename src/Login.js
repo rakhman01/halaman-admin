@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import Cookies from "js-cookie";
 import { useHistory } from "react-router";
+import { Snackbar, Alert } from "@mui/material";
 
 const validationSchema = yup.object().shape({
   email: yup.string().required("Required").email("Invalid email"),
@@ -12,12 +13,12 @@ const validationSchema = yup.object().shape({
 });
 
 const Login = () => {
+  const [open, setOpen] = useState(false);
+  const history = useHistory();
   const [login] = useState({
     email: "",
     password: "",
   });
-
-  const history = useHistory();
 
   const [mutation] = useMutation(LOGIN_MUTATIONS);
 
@@ -36,6 +37,7 @@ const Login = () => {
       Cookies.set("token", signIn.data.login.token);
       history.push("/TabelAdmin");
     } catch (error) {
+      setOpen(true);
       console.log(error);
     }
   };
@@ -146,6 +148,16 @@ const Login = () => {
             </button>
           </div>
         </form>
+        <div>
+          <Snackbar
+            open={open}
+            autoHideDuration={5000}
+            onClose={() => setOpen(false)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          >
+            <Alert severity="error">Akun Anda Tidak Terdaftar</Alert>
+          </Snackbar>
+        </div>
       </div>
     </div>
   );
