@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { DELETE_USER, USERS_QUERY } from "../Api/tabel/query";
+import { DELETE_USER, USERS_QUERY, USER_QUERY } from "../Api/tabel/query";
 import Loading from "./Loading";
+import Error from "../Api/Error";
+import Cookies from "js-cookie";
 
 export default function TableAdmin() {
   const { loading, error, data } = useQuery(USERS_QUERY);
-  const deleteuser = useMutation(DELETE_USER);
+  const [deleteuser] = useMutation(DELETE_USER);
+
+  const handleRefresh = () => {
+    return window.location.reload(true);
+  };
+
+  const handledeleteuser = (id) => {
+    console.log(Cookies.get("token"));
+    try {
+      deleteuser({ variables: { id: id } }).then((r) => {
+        console.log(r);
+        handleRefresh();
+      });
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
 
   if (loading) {
     return <Loading />;
   }
 
   if (error) {
-    return <h1>Error</h1>;
+    return <Error />;
   }
-  console.log(data, "data anggota");
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -71,6 +89,7 @@ export default function TableAdmin() {
               <tbody className="bg-gray-200 divide-y divide-gray-200">
                 {data.users.map((person) => (
                   <tr key={person.name}>
+                    {/* {console.log(person.id, "data user")} */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
@@ -118,14 +137,13 @@ export default function TableAdmin() {
                         Edit
                       </a>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                      <a
-                        href="#"
-                        className="text-indigo-600 hover:text-indigo-900"
-                      >
-                        Delete
-                      </a>
-                    </td>
+                    <button
+                      className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-indigo-600 hover:text-indigo-900"
+                      onClick={() => handledeleteuser(person.id)}
+                      type="button"
+                    >
+                      Delete
+                    </button>
                   </tr>
                 ))}
               </tbody>
